@@ -1,3 +1,4 @@
+// @ts-check
 const AsyncLoader = ({
 	baseURL = window.location.origin,
 	pages = [],
@@ -20,6 +21,7 @@ const AsyncLoader = ({
 		prefix,
 		output,
 		errorURL,
+		errorCache: null,
 
 		async load(page, replace = true) {
 			let loadedPage, error
@@ -28,22 +30,36 @@ const AsyncLoader = ({
 				const res = regexp.test(page)
 				return res
 			} )[0]
-			if(!pageObj.cache) {
-				await fetchHTML(`${this.baseURL}/${this.prefix}/${page}`)
-				.then(data => (loadedPage = data))
-				.catch(err => (error = err))
-				pageObj.cache = loadedPage
+			if(pageObj) {
+				if(!pageObj.cache && pageObj) {
+					await fetchHTML(`${this.baseURL}/${this.prefix}/${page}`)
+					.then(data => (loadedPage = data))
+					.catch(err => (error = err))
+					pageObj.cache = loadedPage
+				} else {
+					loadedPage = pageObj.cache
+				}
 			} else {
-				loadedPage = pageObj.cache
+				error = "No such site"
 			}
 
 			if (error) { // Something went wrong -> printing error page
-				try {
-					await fetchHTML(this.errorURL).then(
-						d => (this.output.innerHTML = d.text())
-					)
-				} catch (err) { // no error page
-					throw new Error(err)
+				if(this.errorCache) {
+					this.output.innerHTML = this.errorCache
+				} else {
+					try {
+						await fetchHTML(this.errorURL)
+						.then(
+							d => {
+								this.errorCache = d
+								this.output.innerHTML = d
+							}
+						)
+						.catch(err => err)
+					} catch (err) { // no error page
+						alert(`${err}\n${error}`)
+						throw new Error(err)
+					}
 				}
 			} 
 			else { // Everything is fine -> output
@@ -68,17 +84,20 @@ const AsyncLoader = ({
 			this.output.innerHTML = loadedPages.join(' ')
 		},
 
+		clearCache() {
+			this.pages.forEach(page => page.cache = null)
+		},
+
 		async fetchHTML(url) {
 			return await fetchHTML(url)
 		} 
-	}
+	};
 	
-	const links = [...document.querySelectorAll('.async-link')]
-	links.forEach(link => {
+	[...document.querySelectorAll('.async-link')].forEach(link => {
 		link.addEventListener('click', (e) => {
 			e.preventDefault()
 			const page = e.currentTarget.href.replace(`${_Loader.baseURL}/`, '')
-			const bHash = page.match(/\/(.*)\./)[1]
+			const bHash = page.match(/\/(.*)\./) ? page.match(/\/(.*)\./)[1] : ""
 			location.hash = bHash
 			_Loader.load(page)
 		})
@@ -87,7 +106,15 @@ const AsyncLoader = ({
 	[...document.querySelectorAll('.async-link--all')].forEach(link => {
 		link.addEventListener('click', e => {
 			e.preventDefault()
+			location.hash = ""
 			_Loader.loadMultiple(..._Loader.pages)
+		})
+	});
+
+	[...document.querySelectorAll('.async-clear')].forEach(btn => {
+		btn.addEventListener('click', e => {
+			e.preventDefault()
+			_Loader.clearCache()
 		})
 	})
 	// links.map(page => page.setAttribute('onclick', `(function(e){e.preventDefault();})()`))

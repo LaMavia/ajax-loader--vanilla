@@ -53,6 +53,9 @@ body {
     line-height: var(--nav-height);
     font-size: calc(var(--nav-height) / 2.2);
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    &:nth-of-type(2n) {
+      background-color: rgb(240, 240, 240);
+    }
     @include phone {
       width: 50%;
     }
@@ -87,5 +90,19 @@ body {
     @include phone {
       font-size: 1.2rem;
     }
+  }
+}
+
+.btn {
+  position: fixed;
+  bottom: 1vh;
+  right: 1vh;
+  width: 5vh;
+  height: 5vh;
+  background-color: #fff;
+  color: #1b1b1b;
+  border: none;
+  &:focus {
+    outline: none;
   }
 }

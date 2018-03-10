@@ -62,6 +62,10 @@ body {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+.nav__link:nth-of-type(2n) {
+  background-color: #f0f0f0;
+}
+
 @media screen and (max-width: 599px) {
   .nav__link {
     width: 50%;
@@ -108,5 +112,20 @@ body {
   .section__text {
     font-size: 1.2rem;
   }
+}
+
+.btn {
+  position: fixed;
+  bottom: 1vh;
+  right: 1vh;
+  width: 5vh;
+  height: 5vh;
+  background-color: #fff;
+  color: #1b1b1b;
+  border: none;
+}
+
+.btn:focus {
+  outline: none;
 }
 /*# sourceMappingURL=style.css.map */
