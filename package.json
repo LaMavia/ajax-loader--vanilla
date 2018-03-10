@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec \"http-server\" "
+    "start": "nodemon --exec \"http-server --cors -c-1\" "
   },
   "author": "",
   "license": "ISC",

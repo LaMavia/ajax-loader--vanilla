@@ -1,5 +1,5 @@
 const loader = AsyncLoader({
-	baseURL: "http://localhost:8080/",
+	baseURL: location.origin,
 	pages: ["about/about", "cats/cats"],
   prefix: "sections",
   output: document.getElementById('pages'),
