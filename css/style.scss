@@ -1,0 +1,74 @@
+@import "./variables.scss";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+}
+html {
+  overflow: hidden;
+}
+body {
+  background-color: #1b1b1b;
+  color: #fff;
+  display: grid;
+  grid-template: var(--nav-height) 1fr / 100vw;
+  grid-template-areas: 
+    "nav"
+    "pages"
+  ;
+}
+
+:root {
+  --nav-height: 5vh;
+  @include phone {
+    --nav-height: 10vh;
+  }
+}
+
+
+.nav {
+  grid-area: nav;
+  background-color: #fff;
+  display: flex;
+  flex-flow: row nowrap;
+
+  &__link {
+    display: block;
+    height: 100%;
+    width: 10vw;
+    color: #1b1b1b;
+    text-align: center;
+    text-decoration: none;
+    line-height: var(--nav-height);
+    font-size: calc(var(--nav-height) / 2.2);
+    @include phone {
+      width: 50%;
+    }
+  }
+}
+
+.pages { 
+  grid-area: pages;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.section {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  &__title {
+    font-size: 4rem;
+  }
+  &__text {
+    display: block;
+    padding: 0 10%;
+    font-size: 1.8rem;
+    text-align: left;
+  }
+}
