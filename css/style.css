@@ -31,6 +31,18 @@ body {
   }
 }
 
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  :root {
+    --nav-height: 8vh;
+  }
+}
+
+@media screen and (max-width: 1366px) and (min-width: 1025px) {
+  :root {
+    --nav-height: 9vh;
+  }
+}
+
 .nav {
   grid-area: nav;
   background-color: #fff;
@@ -47,11 +59,25 @@ body {
   text-decoration: none;
   line-height: var(--nav-height);
   font-size: calc(var(--nav-height) / 2.2);
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 @media screen and (max-width: 599px) {
   .nav__link {
     width: 50%;
+  }
+}
+
+@media screen and (max-width: 1366px) and (min-width: 1025px) {
+  .nav__link {
+    width: 20%;
+  }
+}
+
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  .nav__link {
+    width: 40%;
+    margin: 0 auto;
   }
 }
 
@@ -76,5 +102,11 @@ body {
   padding: 0 10%;
   font-size: 1.8rem;
   text-align: left;
+}
+
+@media screen and (max-width: 599px) {
+  .section__text {
+    font-size: 1.2rem;
+  }
 }
 /*# sourceMappingURL=style.css.map */

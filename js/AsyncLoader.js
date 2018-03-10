@@ -23,12 +23,21 @@ const AsyncLoader = ({
 
 		async load(page, replace = true) {
 			let loadedPage, error
-			await fetchHTML(`${this.baseURL}/${this.prefix}/${page}`)
+			const pageObj = _Loader.pages.filter(p => {
+				const regexp = new RegExp(p.href)
+				const res = regexp.test(page)
+				return res
+			} )[0]
+			if(!pageObj.cache) {
+				await fetchHTML(`${this.baseURL}/${this.prefix}/${page}`)
 				.then(data => (loadedPage = data))
 				.catch(err => (error = err))
+				pageObj.cache = loadedPage
+			} else {
+				loadedPage = pageObj.cache
+			}
 
 			if (error) { // Something went wrong -> printing error page
-
 				try {
 					await fetchHTML(this.errorURL).then(
 						d => (this.output.innerHTML = d.text())
@@ -36,8 +45,8 @@ const AsyncLoader = ({
 				} catch (err) { // no error page
 					throw new Error(err)
 				}
-
-			} else { // Everything is fine -> output
+			} 
+			else { // Everything is fine -> output
 				if(replace) this.output.innerHTML = loadedPage
 				return loadedPage
 			}
@@ -46,14 +55,22 @@ const AsyncLoader = ({
 		async loadMultiple(...pages) {
 			const loadedPages = []
 			for(let page of pages) {
-				await this.load(page, false).then(d => {
-					console.log(d)
-					return loadedPages.push(d)
-				})
+				if(!page.cache) {
+					await this.load(page.href, false).then(d => {
+						page.cache = d
+						return loadedPages.push(d)
+					})
+				} else {
+					loadedPages.push(page.cache)
+				}
 			}
-			console.log(loadedPages)
+			// console.log(loadedPages)
 			this.output.innerHTML = loadedPages.join(' ')
-		}
+		},
+
+		async fetchHTML(url) {
+			return await fetchHTML(url)
+		} 
 	}
 	
 	const links = [...document.querySelectorAll('.async-link')]
@@ -65,12 +82,19 @@ const AsyncLoader = ({
 			location.hash = bHash
 			_Loader.load(page)
 		})
+	});
+
+	[...document.querySelectorAll('.async-link--all')].forEach(link => {
+		link.addEventListener('click', e => {
+			e.preventDefault()
+			_Loader.loadMultiple(..._Loader.pages)
+		})
 	})
 	// links.map(page => page.setAttribute('onclick', `(function(e){e.preventDefault();})()`))
 	window.addEventListener('DOMContentLoaded', e => {
 		const hash = location.hash.substr(1, location.hash.length)
-		const page = _Loader.pages.find(p => p.match(new RegExp(`${hash}/${hash}(\.html)?`)))
-		page ? _Loader.load.call(_Loader, page) : null
+		const page = _Loader.pages.find(p => p.href.match(new RegExp(`${hash}/${hash}(\.html)?`)))
+		page ? _Loader.load.call(_Loader, page.href) : null
 	})
 	return _Loader
 }

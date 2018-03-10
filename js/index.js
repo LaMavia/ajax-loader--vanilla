@@ -1,7 +1,16 @@
 const loader = AsyncLoader({
 	baseURL: location.origin + location.pathname,
-	pages: ["about/about", "cats/cats"],
-  prefix: "sections",
-  output: document.getElementById('pages'),
+	pages: [
+		{
+			href: "about/about",
+			cache: null
+		},
+		{
+			href: "cats/cats",
+			cache: null
+		}
+	],
+	prefix: "sections",
+	output: document.getElementById("pages"),
 	errorURL: "./error.html"
 })

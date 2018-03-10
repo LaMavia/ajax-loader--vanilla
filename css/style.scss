@@ -28,6 +28,12 @@ body {
   @include phone {
     --nav-height: 10vh;
   }
+  @include tablet-portrait {
+    --nav-height: 8vh;
+  }
+  @include tablet-landscape {
+    --nav-height: 9vh;
+  }
 }
 
 
@@ -46,8 +52,16 @@ body {
     text-decoration: none;
     line-height: var(--nav-height);
     font-size: calc(var(--nav-height) / 2.2);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     @include phone {
       width: 50%;
+    }
+    @include tablet-landscape {
+      width: 20%;
+    }
+    @include tablet-portrait {
+      width: 40%;
+      margin: 0 auto;
     }
   }
 }
@@ -70,5 +84,8 @@ body {
     padding: 0 10%;
     font-size: 1.8rem;
     text-align: left;
+    @include phone {
+      font-size: 1.2rem;
+    }
   }
 }

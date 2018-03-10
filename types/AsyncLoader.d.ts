@@ -1,6 +1,10 @@
+interface Page {
+  href: string
+  cache: string | null
+}
 interface LoaderSettings {
   baseURL: string
-  pages: string[]
+  pages: Page[]
   prefix: string
   output: HTMLElement
   errorURL: string
