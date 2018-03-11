@@ -93,7 +93,7 @@ const AsyncLoader = ({
 		} 
 	};
 	
-	[...document.querySelectorAll('.async-link')].forEach(link => {
+	document.querySelectorAll('.async-link').forEach(link => {
 		link.addEventListener('click', (e) => {
 			e.preventDefault()
 			const page = e.currentTarget.href.replace(`${_Loader.baseURL}/`, '')
@@ -103,21 +103,22 @@ const AsyncLoader = ({
 		})
 	});
 
-	[...document.querySelectorAll('.async-link--all')].forEach(link => {
+	document.querySelectorAll('.async-link--all').forEach(link => {
 		link.addEventListener('click', e => {
 			e.preventDefault()
+			e.stopPropagation()
 			location.hash = ""
 			_Loader.loadMultiple(..._Loader.pages)
 		})
 	});
 
-	[...document.querySelectorAll('.async-clear')].forEach(btn => {
+	document.querySelectorAll('.async-clear').forEach(btn => {
 		btn.addEventListener('click', e => {
 			e.preventDefault()
 			_Loader.clearCache()
 		})
 	})
-	// links.map(page => page.setAttribute('onclick', `(function(e){e.preventDefault();})()`))
+
 	window.addEventListener('DOMContentLoaded', e => {
 		const hash = location.hash.substr(1, location.hash.length)
 		const page = _Loader.pages.find(p => p.href.match(new RegExp(`${hash}/${hash}(\.html)?`)))
